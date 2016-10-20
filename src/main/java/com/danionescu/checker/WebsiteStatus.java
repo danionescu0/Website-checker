@@ -9,17 +9,19 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class WebsiteStatus {
 
-    private class MessagePrinterTask implements Runnable {
+    private class CheckUrlTask implements Runnable {
+        private String USER_AGENT = "website-checker";
         private String url;
         private Map<String, Boolean> urlStatuses = null;
 
-        public MessagePrinterTask(Map<String, Boolean> urlStatuses, String url) {
+        public CheckUrlTask(Map<String, Boolean> urlStatuses, String url) {
             this.url = url;
             this.urlStatuses = urlStatuses;
         }
@@ -27,19 +29,20 @@ public class WebsiteStatus {
         public void run() {
             HttpClient client = HttpClientBuilder.create().build();
             HttpGet request = new HttpGet(this.url);
-            request.addHeader("User-Agent", "website-checker");
+            request.addHeader("User-Agent", this.USER_AGENT);
             try {
                 client.execute(request);
             } catch (IOException e) {
                 urlStatuses.put(this.url, false);
                 return;
             }
+
             urlStatuses.put(this.url, true);
         }
     }
 
     private ThreadPoolTaskExecutor taskExecutor;
-    protected ConcurrentHashMap<String, Boolean> urlStatuses;
+    private ConcurrentHashMap<String, Boolean> urlStatuses;
 
 
     @Autowired
@@ -47,10 +50,10 @@ public class WebsiteStatus {
         this.taskExecutor = taskExecutor;
     }
 
-    public ArrayList<String> getUnresponsiveUrls(ArrayList<String> urlList) {
+    public ConcurrentHashMap<String, Boolean> getUrlStatuses(ArrayList<String> urlList) {
         urlStatuses = new ConcurrentHashMap<>();
         for (String url: urlList) {
-            taskExecutor.execute(new MessagePrinterTask(urlStatuses, url));
+            taskExecutor.execute(new CheckUrlTask(urlStatuses, url));
         }
         while (taskExecutor.getActiveCount() > 0) {
             try {
@@ -60,20 +63,6 @@ public class WebsiteStatus {
             }
         }
 
-        return doGetUnresponsiveUrls();
-    }
-
-    private ArrayList<String> doGetUnresponsiveUrls() {
-        ArrayList<String> urlList = new ArrayList<>();
-        if (urlStatuses.isEmpty()) {
-            return urlList;
-        }
-        for (Map.Entry<String, Boolean> urlStatus : urlStatuses.entrySet()) {
-            if (false == urlStatus.getValue()) {
-                urlList.add(urlStatus.getKey());
-            }
-        }
-
-        return urlList;
+        return urlStatuses;
     }
 }
