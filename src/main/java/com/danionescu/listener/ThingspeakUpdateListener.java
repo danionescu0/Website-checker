@@ -11,7 +11,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ThingspeakUpdateListener {
     @EventListener
     public void onFinishedChecking(FinishedCheckingEvent finishedCheckingEvent) {
-        System.out.println("url list::");
         ConcurrentHashMap<String, Boolean> urlStatuses = finishedCheckingEvent.getUrlStatuses();
         if (urlStatuses.isEmpty()) {
             return;
