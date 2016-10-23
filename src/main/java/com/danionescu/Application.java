@@ -1,8 +1,11 @@
 package com.danionescu;
 
+import com.beust.jcommander.JCommander;
+import com.danionescu.application.CliParams;
 import com.danionescu.checker.WebsiteStatus;
 import com.danionescu.event.FinishedCheckingEvent;
 import com.danionescu.rest.client.ThingsPeak;
+import com.danionescu.util.UrlProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -23,6 +26,9 @@ public class Application implements CommandLineRunner {
     public ThingsPeak thingsPeak;
 
     @Autowired
+    public UrlProvider urlProvider;
+
+    @Autowired
     public ApplicationEventPublisher eventPublisher;
 
 	public static void main(String[] args) {
@@ -31,13 +37,11 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String[] args) throws IOException {
-        ArrayList<String> urlList= new ArrayList<>();
-        urlList.add("http://www.sentimente.ro");
-        urlList.add("http://www.bohus.ro");
-        urlList.add("http://www.cicibici.ro");
-        urlList.add("http://www.wolframalpha.com/");
+        CliParams cliParams = new CliParams();
+        new JCommander(cliParams, args);
+        ArrayList<String> urlList = urlProvider.get(cliParams.getFile());
 
         ConcurrentHashMap<String, Boolean> urlStatuses = websiteStatus.getUrlStatuses(urlList);
-        this.eventPublisher.publishEvent(new FinishedCheckingEvent(this, urlStatuses));
+        this.eventPublisher.publishEvent(new FinishedCheckingEvent(this, urlStatuses, cliParams));
     }
 }
