@@ -18,11 +18,6 @@ public class FestivalSpeech implements Speech {
 
     @Override
     public void say(String text) {
-        String[] command = {
-                "/bin/sh",
-                "-c",
-                String.format("echo \"%s\" | festival --tts", text)
-        };
-        this.cmdExec.executeCommands(command);
+        this.cmdExec.executeCommand(String.format("echo \"%s\" | festival --tts", text));
     }
 }
