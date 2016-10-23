@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 public class ThingsPeak {
     private Builder restTemplateBuilder;
     private String updateUrl = "https://api.thingspeak.com/update.json";
-    private String apiKey = "https://api.thingspeak.com/update.json";
+    private String apiKey;
 
     @Autowired
     public ThingsPeak(@Value("${thingspeak.api.key}") String apiKey, Builder restTemplateBuilder) {
@@ -21,14 +21,11 @@ public class ThingsPeak {
         this.restTemplateBuilder = restTemplateBuilder;
     }
 
-    public boolean update(String siteName) {
+    public void markWebsiteDown(String siteName) {
         RestTemplate restTemplate = this.restTemplateBuilder.buildDefaultRestTemplate();
         MultiValueMap<String, String> request = new LinkedMultiValueMap<String, String>();
         request.add("api_key", this.apiKey);
         request.add("field1", siteName);
-        String response = restTemplate.postForObject(this.updateUrl, request, String.class);
-        System.out.println(response);
-
-        return true;
+        restTemplate.postForObject(this.updateUrl, request, String.class);
     }
 }
