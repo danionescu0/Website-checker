@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @Todo finish send to thingspeak list of sites that are down
+ */
 @Component
 public class ThingspeakUpdateListener {
     @EventListener

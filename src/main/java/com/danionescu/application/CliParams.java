@@ -11,11 +11,19 @@ public class CliParams {
             description = "Enable speach for verbal site down alerts")
     public boolean verbalAlerts;
 
+    @Parameter(names = {"--gpio-triger", "-gt"}, required = false,
+            description = "Enable triggering a gpio pin")
+    public boolean gpioTrigger;
+
     public String getFile() {
         return this.file;
     }
 
     public boolean hasVerbalAlerts() {
         return this.verbalAlerts;
+    }
+
+    public boolean hasGpioTrigger() {
+        return gpioTrigger;
     }
 }

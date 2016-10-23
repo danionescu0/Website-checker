@@ -1,5 +1,6 @@
 package com.danionescu.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -8,6 +9,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class FestivalSpeech implements Speech {
+    private CmdExec cmdExec;
+
+    @Autowired
+    public FestivalSpeech(CmdExec cmdExec) {
+        this.cmdExec = cmdExec;
+    }
+
     @Override
     public void say(String text) {
         String[] command = {
@@ -15,16 +23,6 @@ public class FestivalSpeech implements Speech {
                 "-c",
                 String.format("echo \"%s\" | festival --tts", text)
         };
-        executeCommand(command);
-    }
-
-    private void executeCommand(String[] command) {
-        Runtime rt = Runtime.getRuntime();
-        try {
-            Process pr = rt.exec(command);
-            pr.getInputStream();
-        } catch (Exception e) {
-            System.out.println("Speech failed with reason:" + e.getMessage());
-        }
+        this.cmdExec.executeCommands(command);
     }
 }

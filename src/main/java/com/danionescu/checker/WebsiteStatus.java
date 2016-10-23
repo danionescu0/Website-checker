@@ -43,7 +43,6 @@ public class WebsiteStatus {
     private ThreadPoolTaskExecutor taskExecutor;
     private ConcurrentHashMap<String, Boolean> urlStatuses;
 
-
     @Autowired
     public WebsiteStatus(ThreadPoolTaskExecutor taskExecutor) {
         this.taskExecutor = taskExecutor;
@@ -52,7 +51,7 @@ public class WebsiteStatus {
     public ConcurrentHashMap<String, Boolean> getUrlStatuses(ArrayList<String> urlList) {
         urlStatuses = new ConcurrentHashMap<>();
         for (String url: urlList) {
-            taskExecutor.execute(new CheckUrlTask(urlStatuses, url));
+            this.taskExecutor.execute(new CheckUrlTask(urlStatuses, url));
         }
         while (taskExecutor.getActiveCount() > 0) {
             try {
