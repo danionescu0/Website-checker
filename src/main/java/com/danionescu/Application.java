@@ -11,6 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class Application implements CommandLineRunner {
     public WebsiteStatus websiteStatus;
 
     @Autowired
-    public ThingsPeak thingsPeak;
+    public ThreadPoolTaskExecutor taskExecutor;
 
     @Autowired
     public UrlProvider urlProvider;
@@ -39,9 +40,10 @@ public class Application implements CommandLineRunner {
     public void run(String[] args) throws IOException {
         CliParams cliParams = new CliParams();
         new JCommander(cliParams, args);
-        ArrayList<String> urlList = urlProvider.get(cliParams.getFile());
+        ArrayList<String> urlList = this.urlProvider.get(cliParams.getFile());
 
-        ConcurrentHashMap<String, Boolean> urlStatuses = websiteStatus.getUrlStatuses(urlList);
+        ConcurrentHashMap<String, Boolean> urlStatuses = this.websiteStatus.getUrlStatuses(urlList);
         this.eventPublisher.publishEvent(new FinishedCheckingEvent(this, urlStatuses, cliParams));
+        this.taskExecutor.shutdown();
     }
 }

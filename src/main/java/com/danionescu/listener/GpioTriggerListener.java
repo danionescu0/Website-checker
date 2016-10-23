@@ -30,7 +30,7 @@ public class GpioTriggerListener {
         public void run() {
             this.gpio.set(this.pin, true);
             try {
-                Thread.sleep(this.pinHoldTime);
+                Thread.sleep(this.pinHoldTime * 1000);
             } catch (InterruptedException e) {
                 System.out.println("Unable to sleep during set gpio pin");
             }

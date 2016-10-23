@@ -15,6 +15,10 @@ public class CmdExec {
     }
 
     public void executeCommand(String command) {
-        executeCommands(new String[]{command});
+        executeCommands(new String[]{
+                "/bin/sh",
+                "-c",
+                command
+        });
     }
 }
