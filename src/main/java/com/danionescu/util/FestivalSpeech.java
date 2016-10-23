@@ -2,6 +2,10 @@ package com.danionescu.util;
 
 import org.springframework.stereotype.Service;
 
+/**
+ * Uses linux "festival" texy to speech software
+ * how to use it: https://wiki.archlinux.org/index.php/Festival
+ */
 @Service
 public class FestivalSpeech implements Speech {
     @Override
