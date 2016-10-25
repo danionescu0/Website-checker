@@ -4,8 +4,8 @@ import com.beust.jcommander.JCommander;
 import com.danionescu.application.CliParams;
 import com.danionescu.checker.WebsiteStatus;
 import com.danionescu.event.FinishedCheckingEvent;
-import com.danionescu.rest.client.ThingsPeak;
-import com.danionescu.util.UrlProvider;
+import com.danionescu.model.UrlProperties;
+import com.danionescu.util.UrlPropertiesProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -27,7 +27,7 @@ public class Application implements CommandLineRunner {
     private ThreadPoolTaskExecutor taskExecutor;
 
     @Autowired
-    private UrlProvider urlProvider;
+    private UrlPropertiesProvider urlPropertiesProvider;
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
@@ -40,7 +40,7 @@ public class Application implements CommandLineRunner {
     public void run(String[] args) throws IOException {
         CliParams cliParams = new CliParams();
         new JCommander(cliParams, args);
-        ArrayList<String> urlList = this.urlProvider.get(cliParams.getFile());
+        ArrayList<UrlProperties> urlList = this.urlPropertiesProvider.get(cliParams.getFile());
 
         ConcurrentHashMap<String, Boolean> urlStatuses = this.websiteStatus.getUrlStatuses(urlList);
         this.eventPublisher.publishEvent(new FinishedCheckingEvent(this, urlStatuses, cliParams));

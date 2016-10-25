@@ -5,15 +5,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class CmdExec {
     public void executeCommand(String command) {
-        Runtime rt = Runtime.getRuntime();
+        Runtime runtime = Runtime.getRuntime();
         try {
             String[] commands = new String[]{
                     "/bin/sh",
                     "-c",
                     command
             };
-            Process pr = rt.exec(commands);
-            pr.getInputStream();
+            runtime.exec(commands);
         } catch (Exception e) {
             System.out.println(String.format("Command %s failed with reason: %s", command, e.getMessage()));
         }

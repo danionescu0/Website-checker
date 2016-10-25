@@ -1,5 +1,6 @@
 package com.danionescu.checker;
 
+import com.danionescu.model.UrlProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
@@ -18,9 +19,9 @@ public class WebsiteStatus {
         this.taskExecutor = taskExecutor;
     }
 
-    public ConcurrentHashMap<String, Boolean> getUrlStatuses(ArrayList<String> urlList) {
+    public ConcurrentHashMap<String, Boolean> getUrlStatuses(ArrayList<UrlProperties> urlList) {
         urlStatuses = new ConcurrentHashMap<>();
-        for (String url: urlList) {
+        for (UrlProperties url: urlList) {
             this.taskExecutor.execute(new CheckUrlTask(urlStatuses, url));
         }
         while (taskExecutor.getActiveCount() > 0) {

@@ -1,5 +1,6 @@
 package com.danionescu.checker;
 
+import com.danionescu.model.UrlProperties;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
@@ -10,29 +11,33 @@ import java.util.Map;
 
 public class CheckUrlTask implements Runnable {
     private String USER_AGENT = "website-checker";
-    private String url;
+    private UrlProperties urlProperties;
     private Map<String, Boolean> urlStatuses = null;
 
-    public CheckUrlTask(Map<String, Boolean> urlStatuses, String url) {
-        this.url = url;
+    public CheckUrlTask(Map<String, Boolean> urlStatuses, UrlProperties urlProperties) {
+        this.urlProperties = urlProperties;
         this.urlStatuses = urlStatuses;
     }
 
     public void run() {
-        RequestConfig config = RequestConfig.custom()
-                .setConnectTimeout(1000)
-                .setConnectionRequestTimeout(1000)
-                .setSocketTimeout(1000).build();
-        HttpClient client = HttpClientBuilder.create().setDefaultRequestConfig(config).build();
-        HttpGet request = new HttpGet(this.url);
+        HttpClient client = getHttpClient();
+        HttpGet request = new HttpGet(this.urlProperties.getLink());
         request.addHeader("User-Agent", this.USER_AGENT);
         try {
             client.execute(request);
         } catch (IOException e) {
-            urlStatuses.put(this.url, false);
+            urlStatuses.put(this.urlProperties.getLink(), false);
             return;
         }
 
-        urlStatuses.put(this.url, true);
+        urlStatuses.put(this.urlProperties.getLink(), true);
+    }
+
+    private HttpClient getHttpClient() {
+        RequestConfig config = RequestConfig.custom()
+                .setConnectTimeout(this.urlProperties.getTimeout())
+                .setConnectionRequestTimeout(this.urlProperties.getTimeout())
+                .setSocketTimeout(this.urlProperties.getTimeout()).build();
+        return HttpClientBuilder.create().setDefaultRequestConfig(config).build();
     }
 }
