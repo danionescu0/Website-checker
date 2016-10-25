@@ -6,11 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
-public class ThingspeakUpdateListener {
+final public class ThingspeakUpdateListener {
     private ThingsPeak thingsPeak;
 
     @Autowired
@@ -24,10 +23,8 @@ public class ThingspeakUpdateListener {
         if (urlStatuses.isEmpty()) {
             return;
         }
-        for (Map.Entry<String, Boolean> urlStatus : urlStatuses.entrySet()) {
-            System.out.println(String.format("Status for url %s is:%s", urlStatus.getKey(), urlStatus.getValue()));
-        }
         urlStatuses.forEach((website, status) -> {
+            System.out.println(String.format("Site: %s is %s", website, status ? "up" : "down"));
             this.thingsPeak.markWebsiteDown(website);
         });
     }

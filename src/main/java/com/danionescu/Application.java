@@ -21,16 +21,16 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Application implements CommandLineRunner {
 
     @Autowired
-    public WebsiteStatus websiteStatus;
+    private WebsiteStatus websiteStatus;
 
     @Autowired
-    public ThreadPoolTaskExecutor taskExecutor;
+    private ThreadPoolTaskExecutor taskExecutor;
 
     @Autowired
-    public UrlProvider urlProvider;
+    private UrlProvider urlProvider;
 
     @Autowired
-    public ApplicationEventPublisher eventPublisher;
+    private ApplicationEventPublisher eventPublisher;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
