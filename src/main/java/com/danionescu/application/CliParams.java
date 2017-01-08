@@ -11,9 +11,13 @@ public class CliParams {
             description = "Enable speach for verbal site down alerts")
     public boolean verbalAlerts;
 
-    @Parameter(names = {"--gpio-triger", "-gt"}, required = false,
-            description = "Enable triggering a gpio pin")
-    public boolean gpioTrigger;
+    @Parameter(names = {"--gpio-pi", "gp"}, required = false,
+            description = "Enable triggering a raspberry pi pin")
+    public String gpioPi;
+
+    @Parameter(names = {"--gpio-chip", "gc"}, required = false,
+            description = "Enable triggering a C.H.i.P. pin")
+    public String gpioChip;
 
     public String getFile() {
         return this.file;
@@ -23,7 +27,11 @@ public class CliParams {
         return this.verbalAlerts;
     }
 
-    public boolean hasGpioTrigger() {
-        return gpioTrigger;
+    public String getGpioPi() {
+        return gpioPi;
+    }
+
+    public String getGpioChip() {
+        return gpioChip;
     }
 }

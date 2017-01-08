@@ -1,9 +1,12 @@
-package com.danionescu.util;
+package com.danionescu.gpio;
 
+import com.danionescu.util.CmdExec;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service
+@Component("raspberry-gpio")
 public class RaspberryPiGpio implements GpioDriver {
     private CmdExec cmdExec;
     private String setOutputCommand = "gpio mode %s out";
