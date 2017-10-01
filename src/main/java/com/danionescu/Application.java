@@ -11,20 +11,16 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
 
 @SpringBootApplication
 public class Application implements CommandLineRunner {
 
     @Autowired
     private WebsiteStatus websiteStatus;
-
-    @Autowired
-    private ThreadPoolTaskExecutor taskExecutor;
 
     @Autowired
     private UrlPropertiesProvider urlPropertiesProvider;
@@ -42,8 +38,7 @@ public class Application implements CommandLineRunner {
         new JCommander(cliParams, args);
         ArrayList<UrlProperties> urlList = this.urlPropertiesProvider.get(cliParams.getFile());
 
-        ConcurrentHashMap<String, Boolean> urlStatuses = this.websiteStatus.getUrlStatuses(urlList);
+        HashMap<String, Boolean> urlStatuses = this.websiteStatus.getUrlStatuses(urlList);
         this.eventPublisher.publishEvent(new FinishedCheckingEvent(this, urlStatuses, cliParams));
-        this.taskExecutor.shutdown();
     }
 }

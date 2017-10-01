@@ -1,16 +1,18 @@
 package com.danionescu.model;
 
+import java.net.URI;
+
 public class UrlProperties {
-    private String link;
+    private URI uri;
     private int timeout;
 
-    public UrlProperties(String link, int timeout) {
-        this.link = link;
+    public UrlProperties(URI uri, int timeout) {
+        this.uri = uri;
         this.timeout = timeout;
     }
 
-    public String getLink() {
-        return link;
+    public URI getUri() {
+        return this.uri;
     }
 
     public int getTimeout() {

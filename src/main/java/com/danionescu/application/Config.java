@@ -1,5 +1,7 @@
 package com.danionescu.application;
 
+import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.DefaultAsyncHttpClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -17,5 +19,10 @@ public class Config {
         threadPoolTaskExecutor.setQueueCapacity(25);
 
         return threadPoolTaskExecutor;
+    }
+
+    @Bean
+    AsyncHttpClient asyncHttpClient() {
+        return new DefaultAsyncHttpClient();
     }
 }

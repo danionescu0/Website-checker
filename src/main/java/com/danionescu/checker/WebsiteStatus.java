@@ -1,37 +1,49 @@
 package com.danionescu.checker;
 
 import com.danionescu.model.UrlProperties;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import com.danionescu.rest.client.AsyncWebsiteStatusClient;
+import com.danionescu.rest.client.AsyncWebsiteStatusClientImpl;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class WebsiteStatus {
+    private AsyncWebsiteStatusClient asyncWebsiteStatusClient;
 
-    private ThreadPoolTaskExecutor taskExecutor;
-    private ConcurrentHashMap<String, Boolean> urlStatuses;
-
-    @Autowired
-    public WebsiteStatus(ThreadPoolTaskExecutor taskExecutor) {
-        this.taskExecutor = taskExecutor;
+    public WebsiteStatus(AsyncWebsiteStatusClientImpl asyncWebsiteStatusClient) {
+        this.asyncWebsiteStatusClient = asyncWebsiteStatusClient;
     }
 
-    public ConcurrentHashMap<String, Boolean> getUrlStatuses(ArrayList<UrlProperties> urlList) {
-        urlStatuses = new ConcurrentHashMap<>();
-        for (UrlProperties url: urlList) {
-            this.taskExecutor.execute(new CheckUrlTask(urlStatuses, url));
+    public HashMap<String, Boolean> getUrlStatuses(List<UrlProperties> urlList) {
+        ArrayList<CompletableFuture<Boolean>> futures = new ArrayList<>();
+        HashMap<String, Boolean> statuses = new HashMap<>();
+        ArrayList<String> uris = new ArrayList<>();
+        for (UrlProperties urlProperties: urlList) {
+            futures.add(this.asyncWebsiteStatusClient.check(urlProperties.getUri()));
+            uris.add(urlProperties.getUri().toString());
         }
-        while (taskExecutor.getActiveCount() > 0) {
+        CompletableFuture<Void> combinedFutures =
+                CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()]));
+
+        int position = 0;
+        combinedFutures.join();
+        for (CompletableFuture<Boolean> future : futures) {
             try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                statuses.put(uris.get(position), future.get());
             }
+            catch (InterruptedException | ExecutionException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+            position ++;
         }
 
-        return urlStatuses;
+
+        return statuses;
     }
 }

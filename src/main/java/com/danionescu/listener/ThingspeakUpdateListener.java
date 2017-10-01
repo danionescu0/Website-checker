@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
 
 @Component
 final public class ThingspeakUpdateListener {
@@ -19,7 +19,7 @@ final public class ThingspeakUpdateListener {
 
     @EventListener
     public void onFinishedChecking(FinishedCheckingEvent finishedCheckingEvent) {
-        ConcurrentHashMap<String, Boolean> urlStatuses = finishedCheckingEvent.getUrlStatuses();
+        HashMap<String, Boolean> urlStatuses = finishedCheckingEvent.getUrlStatuses();
         if (urlStatuses.isEmpty()) {
             return;
         }
