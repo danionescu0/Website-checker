@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.web.client.RestTemplate;
 
 @Configuration
 @PropertySource("application.properties")
@@ -24,5 +25,10 @@ public class Config {
     @Bean
     AsyncHttpClient asyncHttpClient() {
         return new DefaultAsyncHttpClient();
+    }
+
+    @Bean
+    public RestTemplate buildDefaultRestTemplate() {
+        return new RestTemplate();
     }
 }

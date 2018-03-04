@@ -1,4 +1,4 @@
-package com.danionescu.checker;
+package com.danionescu.main;
 
 import com.danionescu.model.UrlProperties;
 import com.danionescu.rest.client.AsyncWebsiteStatusClient;
@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -25,7 +24,7 @@ public class WebsiteStatus {
         HashMap<String, Boolean> statuses = new HashMap<>();
         ArrayList<String> uris = new ArrayList<>();
         for (UrlProperties urlProperties: urlList) {
-            futures.add(this.asyncWebsiteStatusClient.check(urlProperties.getUri()));
+            futures.add(this.asyncWebsiteStatusClient.check(urlProperties));
             uris.add(urlProperties.getUri().toString());
         }
         CompletableFuture<Void> combinedFutures =

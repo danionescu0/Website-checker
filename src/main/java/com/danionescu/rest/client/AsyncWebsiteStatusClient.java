@@ -1,8 +1,9 @@
 package com.danionescu.rest.client;
 
-import java.net.URI;
+import com.danionescu.model.UrlProperties;
+
 import java.util.concurrent.CompletableFuture;
 
 public interface AsyncWebsiteStatusClient {
-    CompletableFuture<Boolean> check(URI uri);
+    CompletableFuture<Boolean> check(UrlProperties urlProperties);
 }

@@ -1,8 +1,8 @@
 package com.danionescu.rest.client;
 
+import com.danionescu.model.UrlProperties;
 import org.springframework.stereotype.Service;
 
-import java.net.URI;
 import java.util.concurrent.CompletableFuture;
 
 import org.asynchttpclient.*;
@@ -16,12 +16,13 @@ public class AsyncWebsiteStatusClientImpl implements AsyncWebsiteStatusClient {
     }
 
     @Override
-    public CompletableFuture<Boolean> check(URI uri) {
+    public CompletableFuture<Boolean> check(UrlProperties urlProperties) {
         return this.asyncHttpClient
-                .prepareGet(uri.toString())
+                .prepareGet(urlProperties.getUri().toString())
+                .setRequestTimeout(urlProperties.getTimeout())
                 .execute()
                 .toCompletableFuture()
-                .thenApply(resp -> resp.getStatusCode() != 200 ? false : true)
+                .thenApply(resp -> resp.getStatusCode() == 200)
                 .exceptionally(t -> false);
     }
 }

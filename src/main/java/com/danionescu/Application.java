@@ -2,7 +2,7 @@ package com.danionescu;
 
 import com.beust.jcommander.JCommander;
 import com.danionescu.application.CliParams;
-import com.danionescu.checker.WebsiteStatus;
+import com.danionescu.main.WebsiteStatus;
 import com.danionescu.event.FinishedCheckingEvent;
 import com.danionescu.model.UrlProperties;
 import com.danionescu.util.UrlPropertiesProvider;
