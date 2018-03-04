@@ -3,6 +3,7 @@ package com.danionescu.main;
 import com.danionescu.model.UrlProperties;
 import com.danionescu.rest.client.AsyncWebsiteStatusClient;
 import com.danionescu.rest.client.AsyncWebsiteStatusClientImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.concurrent.ExecutionException;
 public class WebsiteStatus {
     private AsyncWebsiteStatusClient asyncWebsiteStatusClient;
 
+    @Autowired
     public WebsiteStatus(AsyncWebsiteStatusClientImpl asyncWebsiteStatusClient) {
         this.asyncWebsiteStatusClient = asyncWebsiteStatusClient;
     }
