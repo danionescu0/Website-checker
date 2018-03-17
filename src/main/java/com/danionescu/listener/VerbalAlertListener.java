@@ -25,6 +25,9 @@ public class VerbalAlertListener {
         if (!finishedCheckingEvent.getCliParams().hasVerbalAlerts()) {
             return;
         }
+        if (getNrFailedUrls(finishedCheckingEvent.getUrlStatuses()) == 0) {
+            return;
+        }
         this.speech.say(getTextToSpeech(finishedCheckingEvent.getUrlStatuses()));
     }
 

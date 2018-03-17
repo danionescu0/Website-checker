@@ -16,7 +16,7 @@ can be usefull if you want to implement a physical alarm like a strobe light or 
 * any machine or development board like Raspberry Pi, C.H.I.P, etc
 * java 8 to run
 * gradle to build
-* optional install festival (for text to speech capabilities): 
+* [optional] install festival (for text to speech capabilities): 
 http://wisercoder.com/install-festival-text-speech-ubuntu/
 
 ## Usage
@@ -27,7 +27,7 @@ gradle build
 ````
 2. Run it: 
 ````
-java -jar -f /path/to/website-list.txt [--gpio-chip CSID0] [-va] [--gpio-pi pin_nr_on_pi]
+java -jar -f /path_to_cloned_repo/build/libs/websitechecker-0.0.1-SNAPSHOT.jar /path/to/website-list.txt [--gpio-chip CSID0] [-va] [--gpio-pi pin_nr_on_pi]
 ````
 
 where: 
@@ -54,6 +54,17 @@ http://www.imdb.com 5050
 ````
 The example above checks if github.com responds under 1500 ms and does contains the words "Learn"
 and "Git" and the website imdb.com responds in 5050 ms.
+
+
+4. [optional] set it to run as a cron job using crontab
+
+The example below sets the checker to run every minute and to log output on "/path_to_log_file": 
+````
+crontab -e
+
+# now write in crontab
+* * * * * java -jar /path_to_cloned_repo/build/libs/websitechecker-0.0.1-SNAPSHOT.jar -f /path/to/website-list.txt [--gpio-chip CSID0] [-va] [--gpio-pi pin_nr_on_pi]  /path_to_log_file
+````
 
 
 ## Extra configuration

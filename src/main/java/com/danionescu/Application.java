@@ -11,6 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ConfigurableApplicationContext;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,6 +28,9 @@ public class Application implements CommandLineRunner {
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
+    
+    @Autowired
+    private ConfigurableApplicationContext context;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
@@ -40,5 +44,6 @@ public class Application implements CommandLineRunner {
 
         HashMap<String, Boolean> urlStatuses = this.websiteStatus.getUrlStatuses(urlList);
         this.eventPublisher.publishEvent(new FinishedCheckingEvent(this, urlStatuses, cliParams));
+        System.exit(SpringApplication.exit(context));
     }
 }
