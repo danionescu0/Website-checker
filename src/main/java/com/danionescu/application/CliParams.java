@@ -19,6 +19,10 @@ public class CliParams {
             description = "Enable triggering a C.H.i.P. pin")
     public String gpioChip;
 
+    @Parameter(names = {"--email-alert", "ea"}, required = false,
+            description = "Sends email alert")
+    public boolean emailAlert;
+
     public String getFile() {
         return this.file;
     }
@@ -33,5 +37,9 @@ public class CliParams {
 
     public String getGpioChip() {
         return gpioChip;
+    }
+
+    public boolean hasEmailAlert() {
+        return this.emailAlert;
     }
 }

@@ -10,7 +10,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CHIPGpioTriggerListener extends GpioTriggerListener {
+public final class CHIPGpioTriggerListener extends GpioTriggerListener {
 
     @Autowired
     @Qualifier("chip-gpio")

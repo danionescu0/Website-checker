@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 @Component
-public class VerbalAlertListener {
+public final class VerbalAlertListener {
     private Speech speech;
     private String oneFailedText = "Website %s is down";
     private String multipleFailedText = "Multiple websites are down";

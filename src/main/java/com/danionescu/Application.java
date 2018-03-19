@@ -28,7 +28,7 @@ public class Application implements CommandLineRunner {
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
-    
+
     @Autowired
     private ConfigurableApplicationContext context;
 
