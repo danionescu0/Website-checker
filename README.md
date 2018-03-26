@@ -10,6 +10,7 @@ Main features:
 * Has text to speech capabilities to verbally report the problem (optionally)
 * Supports [raspberry pi](https://www.raspberrypi.org/) and [C.H.I.P](https://getchip.com/). development board integration having the ability to toggle a pin on and off. This 
 can be usefull if you want to implement a physical alarm like a strobe light or a horn
+* Email alerts with the report
 
 
 ## What do you need
@@ -19,15 +20,31 @@ can be usefull if you want to implement a physical alarm like a strobe light or 
 * [optional] install festival (for text to speech capabilities): 
 http://wisercoder.com/install-festival-text-speech-ubuntu/
 
+
 ## Usage
-1. Build the project:
+
+
+1. Cofiguration (optional), In application.properties you can configure:
+
+* The thingspeak api key. You can make a free account [here](https://thingspeak.com/) 
+and find out more.  
+command: **thingspeak.api.key=the_key_provided_by_thingspeak**
+
+* How much time will the GPIO pin be active 
+command: **gpio.pinHoldTime=nr_of_seconds_to_hold_gpio_active**
+
+* mail.username, mail.password represending credential for email authentification on gmail
+* mail.notifiedAddress representing the email address that will receive the alers
+
+2. Build the project:
 
 ````
 gradle build
 ````
-2. Run it: 
+
+3. Run it: 
 ````
-java -jar -f /path_to_cloned_repo/build/libs/websitechecker-0.0.1-SNAPSHOT.jar /path/to/website-list.txt [--gpio-chip CSID0] [-va] [--gpio-pi pin_nr_on_pi]
+java -jar -f /path_to_cloned_repo/build/libs/websitechecker-0.0.1-SNAPSHOT.jar /path/to/website-list.txt [--gpio-chip CSID0] [-va] [--gpio-pi pin_nr_on_pi] [--email-alert]
 ````
 
 where: 
@@ -38,6 +55,7 @@ website check rules
 along with the milliseconds to wait for the site response. The separator is space
 * "--gpio-chip" enable triggering gpio pin on C.H.I.P. development board on pin "CDID0"
 * "-va" enable voice alert
+* "--email-alert" enable email alert, the email configuration must be set in application.properties
 
 website check rules from the "/path/to/website-list.txt" 
 
@@ -45,7 +63,7 @@ website check rules from the "/path/to/website-list.txt"
 * first argument is the webpage
 * second argument is the timeout in milliseconds
 * the next arguments are regex rules to check if they are matched in the webpage content, 
-if they aren't matched the page is considered as "down"
+if they aren't matched the url is considered as "down"
 
 example:
 ````
@@ -63,19 +81,8 @@ The example below sets the checker to run every minute and to log output on "/pa
 crontab -e
 
 # now write in crontab
-* * * * * java -jar /path_to_cloned_repo/build/libs/websitechecker-0.0.1-SNAPSHOT.jar -f /path/to/website-list.txt [--gpio-chip CSID0] [-va] [--gpio-pi pin_nr_on_pi]  /path_to_log_file
+* * * * * java -jar /path_to_cloned_repo/build/libs/websitechecker-0.0.1-SNAPSHOT.jar -f /path/to/website-list.txt [--gpio-chip CSID0] [-va] [--gpio-pi pin_nr_on_pi] [--email-alert] /path_to_log_file
 ````
-
-
-## Extra configuration
-In application;properties you can configure:
-
-* The thingspeak api key. You can make a free account [here](https://thingspeak.com/) 
-and find out more.  
-command: **thingspeak.api.key=the_key_provided_by_thingspeak**
-
-* How much time will the GPIO pin be active 
-command: **gpio.pinHoldTime=nr_of_seconds_to_hold_gpio_active**
 
 ## Extending the code
 Using event listeners. 
@@ -97,9 +104,10 @@ Code example:
     }
 ````
 
-Currently there are four event listeners, the listeners are responsable for:
+Currently we have the following event listeners:
 
-* Submitting the failure to thingspeak
+* Submitting the check status to thingspeak (succes/failure)
 * Speak a verbal alert (with voice)
 * Trigger a pin for C.H.I.P. development board if configured
 * Trigger a pin for raspberry pi development board if configured
+* Send an email alert
