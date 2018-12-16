@@ -1,7 +1,8 @@
 package com.danionescu;
 
 import com.beust.jcommander.JCommander;
-import com.danionescu.application.CliParams;
+import com.danionescu.cli.CheckerParametersFactory;
+import com.danionescu.model.CheckerParameters;
 import com.danionescu.main.WebsiteStatus;
 import com.danionescu.event.FinishedCheckingEvent;
 import com.danionescu.model.UrlProperties;
@@ -32,18 +33,20 @@ public class Application implements CommandLineRunner {
     @Autowired
     private ConfigurableApplicationContext context;
 
+    @Autowired
+    private CheckerParametersFactory checkerParametersFactory;
+
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
 	}
 
     @Override
-    public void run(String[] args) throws IOException {
-        CliParams cliParams = new CliParams();
-        new JCommander(cliParams, args);
-        ArrayList<UrlProperties> urlList = this.urlPropertiesProvider.get(cliParams.getFile());
+    public void run(String[] args) {
+        CheckerParameters checkerParameters = this.checkerParametersFactory.create(args);
+        ArrayList<UrlProperties> urlList = this.urlPropertiesProvider.get(checkerParameters.getFile());
 
         HashMap<String, Boolean> urlStatuses = this.websiteStatus.getUrlStatuses(urlList);
-        this.eventPublisher.publishEvent(new FinishedCheckingEvent(this, urlStatuses, cliParams));
+        this.eventPublisher.publishEvent(new FinishedCheckingEvent(this, urlStatuses, checkerParameters));
         System.exit(SpringApplication.exit(context));
     }
 }

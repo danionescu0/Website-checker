@@ -25,7 +25,7 @@ public final class RaspberryPiGpioTriggerListener extends GpioTriggerListener {
 
     @EventListener
     public void onFinishedChecking(FinishedCheckingEvent finishedCheckingEvent) {
-        String pinName = finishedCheckingEvent.getCliParams().getGpioPi();
+        String pinName = finishedCheckingEvent.getCheckerParameters().getGpioPi();
         if (null == pinName) {
             return;
         }

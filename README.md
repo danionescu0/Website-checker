@@ -1,5 +1,5 @@
 # Website-checker
-This is a website down checker which supports running requests in paralel and can be installed
+This is a website down checker which supports running check requests in paralel and can be installed
 on a development board.
 
 Main features:

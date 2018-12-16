@@ -25,7 +25,7 @@ public final class CHIPGpioTriggerListener extends GpioTriggerListener {
 
     @EventListener
     public void onFinishedChecking(FinishedCheckingEvent finishedCheckingEvent) {
-        String pinName = finishedCheckingEvent.getCliParams().getGpioChip();
+        String pinName = finishedCheckingEvent.getCheckerParameters().getGpioChip();
         if (null == pinName) {
             return;
         }

@@ -1,6 +1,6 @@
 package com.danionescu.listener;
 
-import com.danionescu.application.CliParams;
+import com.danionescu.model.CheckerParameters;
 import com.danionescu.event.FinishedCheckingEvent;
 import com.danionescu.util.Speech;
 import org.junit.Test;
@@ -50,10 +50,10 @@ public class VerbalAlertListenerTest {
     }
 
     private FinishedCheckingEvent getFinishedCheckingEvent(boolean hasVerbalAlerts) {
-        CliParams cliParams = Mockito.mock(CliParams.class);
-        Mockito.when(cliParams.hasVerbalAlerts()).thenReturn(hasVerbalAlerts);
+        CheckerParameters checkerParameters = Mockito.mock(CheckerParameters.class);
+        Mockito.when(checkerParameters.hasVerbalAlerts()).thenReturn(hasVerbalAlerts);
         FinishedCheckingEvent finishedCheckingEvent = Mockito.mock(FinishedCheckingEvent.class);
-        Mockito.when(finishedCheckingEvent.getCliParams()).thenReturn(cliParams);
+        Mockito.when(finishedCheckingEvent.getCheckerParameters()).thenReturn(checkerParameters);
 
 
         return finishedCheckingEvent;

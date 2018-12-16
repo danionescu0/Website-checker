@@ -22,7 +22,7 @@ public final class VerbalAlertListener {
 
     @EventListener
     public void onFinishedChecking(FinishedCheckingEvent finishedCheckingEvent) {
-        if (!finishedCheckingEvent.getCliParams().hasVerbalAlerts()) {
+        if (!finishedCheckingEvent.getCheckerParameters().hasVerbalAlerts()) {
             return;
         }
         if (getNrFailedUrls(finishedCheckingEvent.getUrlStatuses()) == 0) {

@@ -25,7 +25,7 @@ public class EmailAlertListener  {
 
     @EventListener
     public void onFinishedChecking(FinishedCheckingEvent finishedCheckingEvent) {
-        if (!finishedCheckingEvent.getCliParams().hasEmailAlert()) {
+        if (!finishedCheckingEvent.getCheckerParameters().hasEmailAlert()) {
             return;
         }
         if (getNrFailedUrls(finishedCheckingEvent.getUrlStatuses()) == 0) {

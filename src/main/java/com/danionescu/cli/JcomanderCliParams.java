@@ -1,8 +1,8 @@
-package com.danionescu.application;
+package com.danionescu.cli;
 
 import com.beust.jcommander.Parameter;
 
-public class CliParams {
+public class JcomanderCliParams {
     @Parameter(names = {"--file", "-f"}, required = true,
             description = "The path to the file containing the url list for scanning")
     public String file;
@@ -22,24 +22,4 @@ public class CliParams {
     @Parameter(names = {"--email-alert", "ea"}, required = false,
             description = "Sends email alert")
     public boolean emailAlert;
-
-    public String getFile() {
-        return this.file;
-    }
-
-    public boolean hasVerbalAlerts() {
-        return this.verbalAlerts;
-    }
-
-    public String getGpioPi() {
-        return gpioPi;
-    }
-
-    public String getGpioChip() {
-        return gpioChip;
-    }
-
-    public boolean hasEmailAlert() {
-        return this.emailAlert;
-    }
 }

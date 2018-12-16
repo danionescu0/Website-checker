@@ -9,6 +9,9 @@
 .DS_Store
 /build
 /captures
+/classes
+/gradle*
+/out*
 
 
 ### STS ###
@@ -24,10 +27,3 @@
 *.iml
 *.ipr
 
-### NetBeans ###
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
